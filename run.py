@@ -33,7 +33,7 @@ def parse_data(raw_data):
                 sensors[point["channel"]] = [point["d"]]
             else:
                 sensors[point["channel"]].append(point["d"])
-        
+
         for sensor in sensors:
             numPoints = len(sensor)
             total = 0
@@ -41,7 +41,7 @@ def parse_data(raw_data):
                 total = total + val
             average = total / numPoints
             sensors[sensor] = average
-        
+
         tolerance = .05
         analyzed_data = {}
         for sensor in sensors:
@@ -56,7 +56,7 @@ def parse_data(raw_data):
                     break;
             else:
                 analyzed_data[keys[i]] = true
-                
+
         num_true = 0
         for i in analyzed_data:
             if analyzed_data[i]:
@@ -65,15 +65,15 @@ def parse_data(raw_data):
         fill = num_true/len(sensors)
         fill = fill*4
         fill = int(fill)
-        
+
 	return fill #returns number of bars to be displayed, ie 0, 1, 2, 3, or 4
 
 @app.route('/')
 @app.route('/index/')
 def index():
-	data = get_data()
-	_bars = parse_data(data)
-	return render_template('index.html', bars=_bars)
+	#data = get_data()
+	#_bars = parse_data(data)
+	return render_template('index.html', image='static/images/propaneGreen.png')
 
 @app.errorhandler(404)
 def page_not_found(error):
