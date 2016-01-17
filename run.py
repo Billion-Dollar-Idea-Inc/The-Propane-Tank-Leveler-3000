@@ -66,14 +66,23 @@ def parse_data(raw_data):
         fill = fill*4
         fill = int(fill)
 
-	return fill #returns number of bars to be displayed, ie 0, 1, 2, 3, or 4
+	return fill
 
 @app.route('/')
 @app.route('/index/')
 def index():
 	#data = get_data()
 	#_bars = parse_data(data)
-	return render_template('index.html', image='static/images/propaneGreen.png')
+        
+        dic_pic = {
+            '0': 'static/images/propaneEmpty.png',
+            '1': 'static/images/propaneRed.png',
+            '2': 'static/images/propaneOrange.png',
+            '3': 'static/images/propaneYellow.png',
+            '4': 'static/images/propaneGreen.png'
+        }
+
+	return render_template('index.html', image = dic_pic[str(parse_data(data))])
 
 @app.errorhandler(404)
 def page_not_found(error):
