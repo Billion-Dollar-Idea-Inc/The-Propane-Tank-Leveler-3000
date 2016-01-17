@@ -55,7 +55,7 @@ def parse_data(raw_data):
             if sensors[sensor] - sensors[sensor] * tolerance < sensors[keys[i-1]] and sensors[keys[i-1]] < sensors[sensor] + sensors[sensor] * tolerance:
                 analyzed_data[keys[i]] = true
             else:
-                break;
+                break
         else:
             analyzed_data[keys[i]] = true
 
@@ -73,18 +73,23 @@ def parse_data(raw_data):
 @app.route('/')
 @app.route('/index/')
 def index():
-	#data = get_data()
-	#_bars = parse_data(data)
+    return render_template('index.html')
 
-    dic_pic = {
-        '0': 'static/images/propaneEmpty.png',
-        '1': 'static/images/propaneRed.png',
-        '2': 'static/images/propaneOrange.png',
-        '3': 'static/images/propaneYellow.png',
-        '4': 'static/images/propaneGreen.png'
-    }
-
-    return render_template('index.html', image = dic_pic[str(1)])
+@app.route('/<id>/', methods=['GET', 'POST'])
+def tank(id):
+    #check to make sure is valid tank but
+    #we're gonna skip that for now
+    valid = True
+    if valid:
+        dic_pic = {
+            '0': '../static/images/propaneEmpty.png',
+            '1': '../static/images/propaneRed.png',
+            '2': '../static/images/propaneOrange.png',
+            '3': '../static/images/propaneYellow.png',
+            '4': '../static/images/propaneGreen.png'
+        }
+        #return render_template('id.html', image = parse_data(data))
+        return render_template('id.html', image = dic_pic[str(1)])
 
 @app.errorhandler(404)
 def page_not_found(error):
