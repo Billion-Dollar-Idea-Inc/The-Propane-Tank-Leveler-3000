@@ -25,7 +25,7 @@ def get_data():
 	pass
 
 def parse_data(data):
-	return 0
+	return 0 #returns number of bars to be displayed, ie 0, 1, 2, 3, or 4
 
 @app.route('/')
 def index():
