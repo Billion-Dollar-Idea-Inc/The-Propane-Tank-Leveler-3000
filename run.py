@@ -2,11 +2,30 @@ from flask import *
 
 app = Flask(__name__)
 
+'''
+this is how the data will be returned in get_data()
+
+returned = {
+    "samples": [
+        {
+            "id":1773,
+            "channel":1,
+            "d":25.25
+        },
+        {
+            "id":1773,
+            "channel":1,
+            "d":25.25
+        }
+    ]
+}
+'''
+
 def get_data():
 	pass
 
 def parse_data(data):
-	pass
+	return 0
 
 @app.route('/')
 def index():
