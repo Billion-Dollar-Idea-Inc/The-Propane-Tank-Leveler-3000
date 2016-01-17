@@ -4,4 +4,9 @@ html {
 
 h1 {
     color: white;
+    text-align: center;
+}
+
+img {
+    padding-top: 40px;
 }
