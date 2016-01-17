@@ -70,10 +70,15 @@ def parse_data(raw_data):
 	return fill #returns number of bars to be displayed, ie 0, 1, 2, 3, or 4
 
 @app.route('/')
+@app.route('/index/')
 def index():
 	data = get_data()
 	_bars = parse_data(data)
 	return render_template('index.html', bars=_bars)
+
+@app.errorhandler(404)
+def page_not_found(error):
+	return render_template('404.html'), 404
 
 if __name__ == '__main__':
 	#app.run(host='0.0.0.0')
