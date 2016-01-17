@@ -24,8 +24,50 @@ returned = {
 def get_data():
 	pass
 
-def parse_data(data):
-	return 0 #returns number of bars to be displayed, ie 0, 1, 2, 3, or 4
+def parse_data(raw_data):
+        sensors = {}
+
+        data = raw_data["samples"]
+        for point in data:
+            if not point["channel"] in sensors:
+                sensors[point["channel"]] = [point["d"]]
+            else:
+                sensors[point["channel"]].append(point["d"])
+        
+        for sensor in sensors:
+            numPoints = len(sensor)
+            total = 0
+            for val in sensor:
+                total = total + val
+            average = total / numPoints
+            sensors[sensor] = average
+        
+        tolerance = .05
+        analized_data = {}
+        for sensor in sensors:
+            analized_data[sensor] = false #default to false, if sensor is at level with propane value will be set to true
+
+        keys = sensors.keys()
+        for i in range(len(keys)):
+            if not i == 0:
+                if not change_found:
+                    if sensors[sensor] - sensors[sensor] * tolerance < sensors[keys[i-1]] and sensors[keys[i-1]] < sensors[sensor] + sensors[sensor] * tolerance:
+                        analized_data[keys[i]] = true
+                    else:
+                        break;
+            else:
+                analized_data[keys[i]] = true
+                
+        num_true = 0
+        for i in analized_data:
+            if analized_data[i]:
+                num_true = num_true + 1
+
+        fill = num_true/len(sensors)
+        fill = fill*4
+        fill = int(fill)
+        
+	return fill #returns number of bars to be displayed, ie 0, 1, 2, 3, or 4
 
 @app.route('/')
 @app.route('/index/')
