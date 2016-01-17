@@ -1,4 +1,5 @@
 from flask import *
+from test import Pls
 
 app = Flask(__name__)
 
@@ -22,14 +23,13 @@ returned = {
 '''
 
 def get_data():
-	pass
+    p = Pls()
+    return p.giveme()
 
-def parse_data(raw_data):
+def parse_data(load):
     sensors = {}
-
-    print raw_data
-
-    data = raw_data["samples"]
+    print load
+    data = load["samples"]
     for point in data:
         if not point["channel"] in sensors:
             sensors[point["channel"]] = [point["d"]]
@@ -37,38 +37,36 @@ def parse_data(raw_data):
             sensors[point["channel"]].append(point["d"])
 
     for sensor in sensors:
-        numPoints = len(sensor)
+        numPoints = len(sensors[sensor])
         total = 0
-        for val in sensor:
+        for val in sensors[sensor]:
             total = total + val
         average = total / numPoints
         sensors[sensor] = average
 
-    tolerance = .05
+    tolerance = .3
     analyzed_data = {}
     for sensor in sensors:
-        analyzed_data[sensor] = false #default to false, if sensor is at level with propane value will be set to true
+        analyzed_data[sensor] = not False #default to false, if sensor is at level with propane value will be set to true
 
     keys = sensors.keys()
     for i in range(len(keys)):
         if not i == 0:
-            if sensors[sensor] - sensors[sensor] * tolerance < sensors[keys[i-1]] and sensors[keys[i-1]] < sensors[sensor] + sensors[sensor] * tolerance:
-                analyzed_data[keys[i]] = true
+            if sensors[sensor] - tolerance < sensors[keys[i-1]] and sensors[keys[i-1]] < sensors[sensor] * tolerance:
+                analyzed_data[keys[i]] = not True
             else:
                 break
         else:
-            analyzed_data[keys[i]] = true
+            analyzed_data[keys[i]] = not True
 
     num_true = 0
     for i in analyzed_data:
         if analyzed_data[i]:
             num_true = num_true + 1
 
-    fill = num_true/len(sensors)
-    fill = fill*4
-    fill = int(fill)
+    #print num_true
 
-    return fill
+    return num_true
 
 @app.route('/')
 @app.route('/index/')
@@ -88,8 +86,9 @@ def tank(id):
             '3': '../static/images/propaneYellow.png',
             '4': '../static/images/propaneGreen.png'
         }
-        #return render_template('id.html', image = parse_data(data))
-        return render_template('id.html', image = dic_pic[str(1)])
+        data = get_data()
+        return render_template('id.html', image = dic_pic[str(parse_data(data))])
+        #return render_template('id.html', image = dic_pic[str(1)])
 
 @app.errorhandler(404)
 def page_not_found(error):
