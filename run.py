@@ -43,24 +43,23 @@ def parse_data(raw_data):
             sensors[sensor] = average
         
         tolerance = .05
-        analized_data = {}
+        analyzed_data = {}
         for sensor in sensors:
-            analized_data[sensor] = false #default to false, if sensor is at level with propane value will be set to true
+            analyzed_data[sensor] = false #default to false, if sensor is at level with propane value will be set to true
 
         keys = sensors.keys()
         for i in range(len(keys)):
             if not i == 0:
-                if not change_found:
-                    if sensors[sensor] - sensors[sensor] * tolerance < sensors[keys[i-1]] and sensors[keys[i-1]] < sensors[sensor] + sensors[sensor] * tolerance:
-                        analized_data[keys[i]] = true
-                    else:
-                        break;
+                if sensors[sensor] - sensors[sensor] * tolerance < sensors[keys[i-1]] and sensors[keys[i-1]] < sensors[sensor] + sensors[sensor] * tolerance:
+                    analyzed_data[keys[i]] = true
+                else:
+                    break;
             else:
-                analized_data[keys[i]] = true
+                analyzed_data[keys[i]] = true
                 
         num_true = 0
-        for i in analized_data:
-            if analized_data[i]:
+        for i in analyzed_data:
+            if analyzed_data[i]:
                 num_true = num_true + 1
 
         fill = num_true/len(sensors)
