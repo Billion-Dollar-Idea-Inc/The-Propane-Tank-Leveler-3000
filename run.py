@@ -27,6 +27,8 @@ def get_data():
 def parse_data(raw_data):
     sensors = {}
 
+    print raw_data
+
     data = raw_data["samples"]
     for point in data:
         if not point["channel"] in sensors:
